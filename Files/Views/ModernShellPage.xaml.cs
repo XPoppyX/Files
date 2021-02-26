@@ -227,6 +227,14 @@ namespace Files.Views
             AppServiceConnectionHelper.ConnectionChanged += AppServiceConnectionHelper_ConnectionChanged;
         }
 
+        private void HorizontalMultitaskingControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (!(MainPage.MultitaskingControl is HorizontalMultitaskingControl))
+            {
+                MainPage.MultitaskingControl = horizontalMultitaskingControl;
+            }
+        }
+
         private void AppSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             switch (e.PropertyName)
@@ -1259,7 +1267,8 @@ namespace Files.Views
         {
             if (incomingSourcePageType == typeof(YourHome) && incomingSourcePageType != null)
             {
-                SidebarSelectedItem = MainPage.SideBarItems.First(x => x.Path.Equals("Home"));
+                var allItems = MainPage.SideBarItems.Where(x => (x as LocationItem)?.ChildItems != null).SelectMany(x => (x as LocationItem).ChildItems);
+                SidebarSelectedItem = allItems.FirstOrDefault(x => x.Path.Equals("Home"));
                 NavigationToolbar.PathControlDisplayText = "NewTab".GetLocalized();
             }
         }
