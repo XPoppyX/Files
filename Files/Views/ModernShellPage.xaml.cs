@@ -207,18 +207,24 @@ namespace Files.Views
          */
         public void UpdatePathUIToWorkingDirectory(string newWorkingDir, string singleItemOverride = null)
         {
-            // Clear the path UI
-            NavigationToolbar.PathComponents.Clear();
-
             if (string.IsNullOrWhiteSpace(singleItemOverride))
             {
-                foreach (var component in StorageFileExtensions.GetDirectoryPathComponents(newWorkingDir))
+                var components = StorageFileExtensions.GetDirectoryPathComponents(newWorkingDir);
+                var lastCommonItemIndex = NavigationToolbar.PathComponents
+                    .Select((value, index) => new { value, index })
+                    .LastOrDefault(x => x.index < components.Count && x.value.Path == components[x.index].Path)?.index ?? 0;
+                while (NavigationToolbar.PathComponents.Count > lastCommonItemIndex)
+                {
+                    NavigationToolbar.PathComponents.RemoveAt(lastCommonItemIndex);
+                }
+                foreach (var component in components.Skip(lastCommonItemIndex))
                 {
                     NavigationToolbar.PathComponents.Add(component);
                 }
             }
             else
             {
+                NavigationToolbar.PathComponents.Clear(); // Clear the path UI
                 NavigationToolbar.PathComponents.Add(new Views.PathBoxItem() { Path = null, Title = singleItemOverride });
             }
         }
@@ -1269,7 +1275,7 @@ namespace Files.Views
                 PreviewPaneDropShadowPanel.SetValue(Grid.RowProperty, 2);
                 PreviewPaneDropShadowPanel.SetValue(Grid.ColumnProperty, 2);
 
-                PreviewPaneDropShadowPanel.OffsetX = -18;
+                PreviewPaneDropShadowPanel.OffsetX = -2;
                 PreviewPaneDropShadowPanel.OffsetY = 0;
                 PreviewPaneDropShadowPanel.ShadowOpacity = 0.04;
 
@@ -1295,7 +1301,7 @@ namespace Files.Views
                 PreviewPaneDropShadowPanel.SetValue(Grid.ColumnProperty, 0);
 
                 PreviewPaneDropShadowPanel.OffsetX = 0;
-                PreviewPaneDropShadowPanel.OffsetY = -18;
+                PreviewPaneDropShadowPanel.OffsetY = -2;
                 PreviewPaneDropShadowPanel.ShadowOpacity = 0.04;
 
                 PreviewPaneGridSplitter.SetValue(Grid.RowProperty, 3);
