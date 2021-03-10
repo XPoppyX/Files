@@ -1,5 +1,6 @@
 ﻿using Files.Common;
 using Files.Dialogs;
+using Files.Enums;
 using Files.EventArguments;
 using Files.Filesystem;
 using Files.Filesystem.FilesystemHistory;
@@ -45,7 +46,7 @@ namespace Files.Views
         public IFilesystemHelpers FilesystemHelpers { get; private set; }
         private CancellationTokenSource cancellationTokenSource;
         public SettingsViewModel AppSettings => App.AppSettings;
-        public StatusBarControl BottomStatusStripControl => StatusBarControl;
+        public IStatusCenterActions StatusCenterActions => StatusBarControl.OngoingTasksControl;
         public bool CanNavigateBackward => ItemDisplayFrame.CanGoBack;
         public bool CanNavigateForward => ItemDisplayFrame.CanGoForward;
 
@@ -983,7 +984,7 @@ namespace Files.Views
                     break;
 
                 case (true, false, false, true, VirtualKey.P):
-                    PreviewPaneEnabled = !PreviewPaneEnabled;
+                    AppSettings.PreviewPaneEnabled = !AppSettings.PreviewPaneEnabled;
                     break;
 
                 case (true, false, false, true, VirtualKey.R): // ctrl + r, refresh
@@ -1229,17 +1230,13 @@ namespace Files.Views
             return DataPackageOperation.None;
         }
 
-        private bool previewPaneEnabled;
-
-        /// <summary>
-        /// Gets or sets the value indicating whether the preview pane should be shown.
-        /// </summary>
+        // This is needed so the layout can be updated when the preview pane is opened
         public bool PreviewPaneEnabled
         {
-            get => previewPaneEnabled;
+            get => AppSettings.PreviewPaneEnabled;
             set
             {
-                previewPaneEnabled = value;
+                AppSettings.PreviewPaneEnabled = value;
                 NotifyPropertyChanged(nameof(PreviewPaneEnabled));
                 UpdatePositioning();
             }
@@ -1256,7 +1253,7 @@ namespace Files.Views
         /// </summary>
         private void UpdatePositioning(bool IsHome = false)
         {
-            if (!PreviewPaneEnabled || IsHome)
+            if (!AppSettings.PreviewPaneEnabled || IsHome)
             {
                 PreviewPaneRow.Height = new GridLength(0);
                 PreviewPaneColumn.Width = new GridLength(0);
