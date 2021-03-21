@@ -4,6 +4,7 @@ using Files.Helpers;
 using Files.Helpers.XamlHelpers;
 using Files.Interacts;
 using Files.UserControls.Selection;
+using Microsoft.Toolkit.Uwp;
 using Microsoft.Toolkit.Uwp.UI;
 using Microsoft.Toolkit.Uwp.UI.Controls;
 using Microsoft.Toolkit.Uwp;
@@ -12,9 +13,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using Windows.Foundation.Collections;
 using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Xaml;
@@ -22,6 +26,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Navigation;
+using Windows.ApplicationModel.Core;
+using Microsoft.Toolkit.Uwp.Helpers;
 
 namespace Files.Views.LayoutModes
 {
@@ -94,6 +100,7 @@ namespace Files.Views.LayoutModes
         private DispatcherQueueTimer tapDebounceTimer;
 
         public GenericFileBrowser()
+            : base()
         {
             InitializeComponent();
             base.BaseLayoutContextFlyout = BaseLayoutContextFlyout;
@@ -107,6 +114,11 @@ namespace Files.Views.LayoutModes
             timerQueueController = DispatcherQueueController.CreateOnDedicatedThread();
             timerQueue = timerQueueController.DispatcherQueue;
             tapDebounceTimer = timerQueue.CreateTimer();
+        }
+
+        protected override void InitializeCommandsViewModel()
+        {
+            CommandsViewModel = new BaseLayoutCommandsViewModel(new BaseLayoutCommandImplementationModel(ParentShellPageInstance));
         }
 
         private void SelectionRectangle_SelectionStarted(object sender, EventArgs e)
@@ -239,8 +251,11 @@ namespace Files.Views.LayoutModes
         {
             try
             {
-                AllView.CurrentColumn = AllView.Columns[1];
-                AllView.BeginEdit();
+                if (IsItemSelected)
+                {
+                    AllView.CurrentColumn = AllView.Columns[1];
+                    AllView.BeginEdit();
+                }
             }
             catch (InvalidOperationException)
             {
@@ -292,7 +307,7 @@ namespace Files.Views.LayoutModes
 
         private TextBox renamingTextBox;
 
-        private void AllView_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
+        private async void AllView_BeginningEdit(object sender, DataGridBeginningEditEventArgs e)
         {
             if (ParentShellPageInstance.FilesystemViewModel.WorkingDirectory.StartsWith(AppSettings.RecycleBinPath))
             {
@@ -317,13 +332,17 @@ namespace Files.Views.LayoutModes
                 {
                     // We have an edit due to the first tap in the double-click mode
                     // Let's wait to see if there is another tap (double click).
-                    tapDebounceTimer.Debounce(() =>
-                    {
-                        tapDebounceTimer.Stop();
 
-                        // EditingEventArgs will be null allowing us to know this edit is not originated by tap
-                        AllView.BeginEdit();
+                    tapDebounceTimer.Debounce(async () =>
+                    {
+                        await CoreApplication.MainView.DispatcherQueue.EnqueueAsync(() =>
+                        {
+                            tapDebounceTimer.Stop();
+
+                            AllView.BeginEdit();
+                        });
                     }, TimeSpan.FromMilliseconds(700), false);
+                    
                 }
             }
             else
@@ -436,7 +455,7 @@ namespace Files.Views.LayoutModes
             {
                 tapDebounceTimer.Stop();
                 await Task.Delay(200); // The delay gives time for the item to be selected
-                ParentShellPageInstance.InteractionOperations.OpenItem_Click(null, null);
+                ParentShellPageInstance.InteractionOperations.OpenSelectedItems(false);
             }
         }
 
@@ -479,7 +498,7 @@ namespace Files.Views.LayoutModes
                 }
                 else
                 {
-                    ParentShellPageInstance.InteractionOperations.OpenItem_Click(null, null);
+                    ParentShellPageInstance.InteractionOperations.OpenSelectedItems(false);
                 }
                 e.Handled = true;
             }
@@ -636,7 +655,17 @@ namespace Files.Views.LayoutModes
         private void AllView_DoubleTapped(object sender, DoubleTappedRoutedEventArgs e)
         {
             tapDebounceTimer.Stop();
-            ParentShellPageInstance.InteractionOperations.OpenItem_Click(null, null);
+            ParentShellPageInstance.InteractionOperations.OpenSelectedItems(false);
         }
+
+        #region IDisposable
+
+        public override void Dispose()
+        {
+            Debugger.Break(); // Not Implemented
+            CommandsViewModel?.Dispose();
+        }
+
+        #endregion
     }
 }

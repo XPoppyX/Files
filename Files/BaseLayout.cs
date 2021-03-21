@@ -5,6 +5,7 @@ using Files.EventArguments;
 using Files.Extensions;
 using Files.Filesystem;
 using Files.Helpers;
+using Files.Interacts;
 using Files.UserControls;
 using Files.ViewModels;
 using Files.Views;
@@ -37,9 +38,9 @@ namespace Files
     /// <summary>
     /// The base class which every layout page must derive from
     /// </summary>
-    public abstract class BaseLayout : Page, INotifyPropertyChanged
+    public abstract class BaseLayout : Page, IBaseLayout, INotifyPropertyChanged
     {
-        private NamedPipeAsAppServiceConnection Connection => ParentShellPageInstance?.ServiceConnection;
+        protected NamedPipeAsAppServiceConnection Connection => ParentShellPageInstance?.ServiceConnection;
 
         public SelectedItemsPropertiesViewModel SelectedItemsPropertiesViewModel { get; }
 
@@ -58,6 +59,8 @@ namespace Files
         public MenuFlyout BaseLayoutContextFlyout { get; set; }
 
         public MenuFlyout BaseLayoutItemContextFlyout { get; set; }
+
+        public BaseLayoutCommandsViewModel CommandsViewModel { get; protected set; }
 
         public IShellPage ParentShellPageInstance { get; private set; } = null;
 
@@ -171,6 +174,8 @@ namespace Files
             timerQueue = timerQueueController.DispatcherQueue;
             dragOverTimer = timerQueue.CreateTimer();
         }
+
+        protected abstract void InitializeCommandsViewModel();
 
         public abstract void FocusFileList();
 
@@ -297,7 +302,7 @@ namespace Files
 
         private void FolderSettings_LayoutModeChangeRequested(object sender, LayoutModeEventArgs e)
         {
-            if (ParentShellPageInstance.ContentPage != null)
+            if (ParentShellPageInstance.SlimContentPage != null)
             {
                 var layoutType = FolderSettings.GetLayoutType(ParentShellPageInstance.FilesystemViewModel.WorkingDirectory);
 
@@ -334,6 +339,7 @@ namespace Files
             Window.Current.CoreWindow.CharacterReceived += Page_CharacterReceived;
             navigationArguments = (NavigationArguments)eventArgs.Parameter;
             ParentShellPageInstance = navigationArguments.AssociatedTabInstance;
+            InitializeCommandsViewModel();
             IsItemSelected = false;
             FolderSettings.LayoutModeChangeRequested += FolderSettings_LayoutModeChangeRequested;
             ParentShellPageInstance.FilesystemViewModel.IsFolderEmptyTextDisplayed = false;
@@ -660,6 +666,8 @@ namespace Files
             {
                 UnloadMenuFlyoutItemByName("SidebarPinItem");
                 UnloadMenuFlyoutItemByName("SidebarUnpinItem");
+                UnloadMenuFlyoutItemByName("PinItemToStart");
+                UnloadMenuFlyoutItemByName("UnpinItemFromStart");
                 UnloadMenuFlyoutItemByName("OpenInNewTab");
                 UnloadMenuFlyoutItemByName("OpenInNewWindowItem");
                 UnloadMenuFlyoutItemByName("OpenInNewPane");
@@ -736,6 +744,7 @@ namespace Files
                 if (SelectedItems.Any(x => x.IsShortcutItem))
                 {
                     UnloadMenuFlyoutItemByName("SidebarPinItem");
+                    UnloadMenuFlyoutItemByName("PinItemToStart");
                     UnloadMenuFlyoutItemByName("CreateShortcut");
                 }
                 else if (SelectedItems.Count == 1)
@@ -766,6 +775,17 @@ namespace Files
                         LoadMenuFlyoutItemByName("SidebarPinItem");
                         UnloadMenuFlyoutItemByName("SidebarUnpinItem");
                     }
+
+                    if (selectedItems.All(x => x.IsItemPinnedToStart))
+                    {
+                        UnloadMenuFlyoutItemByName("PinItemToStart");
+                        LoadMenuFlyoutItemByName("UnpinItemFromStart");
+                    }
+                    else
+                    {
+                        LoadMenuFlyoutItemByName("PinItemToStart");
+                        UnloadMenuFlyoutItemByName("UnpinItemFromStart");
+                    }
                 }
 
                 if (SelectedItems.Count <= 5 && SelectedItems.Count > 0)
@@ -790,10 +810,17 @@ namespace Files
                 {
                     UnloadMenuFlyoutItemByName("OpenInNewPane");
                 }
+
+                //Shift key is not held, remove extras here
+                if(!Window.Current.CoreWindow.GetKeyState(VirtualKey.Shift).HasFlag(CoreVirtualKeyStates.Down))
+                {
+                    UnloadMenuFlyoutItemByName("PinItemToStart");
+                    UnloadMenuFlyoutItemByName("UnpinItemFromStart");
+                }
             }
 
             //check the file extension of the selected item
-            ParentShellPageInstance.ContentPage.SelectedItemsPropertiesViewModel.CheckFileExtension();
+            SelectedItemsPropertiesViewModel.CheckFileExtension();
         }
 
         protected virtual void Page_CharacterReceived(CoreWindow sender, CharacterReceivedEventArgs args)
@@ -879,7 +906,7 @@ namespace Files
         {
             List<IStorageItem> selectedStorageItems = new List<IStorageItem>();
 
-            foreach (ListedItem item in ParentShellPageInstance.ContentPage.SelectedItems)
+            foreach (ListedItem item in ParentShellPageInstance.SlimContentPage.SelectedItems)
             {
                 if (item is ShortcutItem)
                 {
@@ -943,7 +970,7 @@ namespace Files
                     {
                         dragOverItem = null;
                         dragOverTimer.Stop();
-                        ParentShellPageInstance.InteractionOperations.OpenItem_Click(null, null);
+                        ParentShellPageInstance.InteractionOperations.OpenSelectedItems(false);
                     }
                 }, TimeSpan.FromMilliseconds(1000), false);
             }
@@ -1002,7 +1029,7 @@ namespace Files
             ListedItem rowItem = GetItemFromElement(sender);
             if (rowItem != null)
             {
-                await ParentShellPageInstance.InteractionOperations.FilesystemHelpers.PerformOperationTypeAsync(e.AcceptedOperation, e.DataView, (rowItem as ShortcutItem)?.TargetPath ?? rowItem.ItemPath, true);
+                await ParentShellPageInstance.FilesystemHelpers.PerformOperationTypeAsync(e.AcceptedOperation, e.DataView, (rowItem as ShortcutItem)?.TargetPath ?? rowItem.ItemPath, true);
             }
             deferral.Complete();
         }
@@ -1076,5 +1103,22 @@ namespace Files
                 e.Handled = true;
             }
         }
+
+        public async void PinItemToStart_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (ListedItem listedItem in SelectedItems)
+            {
+                await App.SecondaryTileHelper.TryPinFolderAsync(listedItem.ItemPath, listedItem.ItemName);
+            }
+        }
+        public async void UnpinItemFromStart_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (ListedItem listedItem in SelectedItems)
+            {
+                await App.SecondaryTileHelper.UnpinFromStartAsync(listedItem.ItemPath);
+            }
+        }
+
+        public abstract void Dispose();
     }
 }
