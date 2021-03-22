@@ -4,7 +4,7 @@ using Files.Interacts;
 using Files.UserControls;
 using Files.UserControls.MultitaskingControl;
 using Files.ViewModels;
-using Microsoft.Toolkit.Uwp.Extensions;
+using Microsoft.Toolkit.Uwp;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -12,6 +12,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Windows.ApplicationModel.AppService;
 using Windows.ApplicationModel.Core;
 using Windows.ApplicationModel.DataTransfer;
@@ -29,37 +30,36 @@ namespace Files.Views
     public sealed partial class PaneHolderPage : Page, IPaneHolder, ITabItemContent, INotifyPropertyChanged
     {
         public SettingsViewModel AppSettings => App.AppSettings;
-
-        public GridLength SidebarWidth
-        {
-            get
-            {
-                return AppSettings.SidebarWidth;
-            }
-            set
-            {
-                if (AppSettings.SidebarWidth != value)
-                {
-                    AppSettings.SidebarWidth = value;
-                    NotifyPropertyChanged(nameof(SidebarWidth));
-                }
-            }
-        }
-
-        public Interaction InteractionOperations => ActivePane?.InteractionOperations;
         public double DragRegionWidth => CoreApplication.GetCurrentView().TitleBar.SystemOverlayRightInset;
         public IFilesystemHelpers FilesystemHelpers => ActivePane?.FilesystemHelpers;
+
+        private readonly GridLength CompactSidebarWidth;
+
+        public ICommand EmptyRecycleBinCommand { get; private set; }
 
         public PaneHolderPage()
         {
             this.InitializeComponent();
-
+            this.Loaded += PaneHolderPage_Loaded;
             AppSettings.PropertyChanged += AppSettings_PropertyChanged;
             Window.Current.SizeChanged += Current_SizeChanged;
-            Current_SizeChanged(null, null);
 
             this.ActivePane = PaneLeft;
             this.IsRightPaneVisible = IsMultiPaneEnabled && AppSettings.AlwaysOpenDualPaneInNewTab;
+
+            if (App.Current.Resources.TryGetValue("NavigationViewCompactPaneLength", out object paneLength))
+            {
+                if (paneLength is double paneLengthDouble)
+                {
+                    this.CompactSidebarWidth = new GridLength(paneLengthDouble);
+                }
+            }
+            // TODO: fallback / error when failed to get NavigationViewCompactPaneLength value?
+        }
+
+        private void PaneHolderPage_Loaded(object sender, RoutedEventArgs e)
+        {
+            Current_SizeChanged(null, null);
         }
 
         private void AppSettings_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -73,6 +73,10 @@ namespace Files.Views
                 case nameof(AppSettings.SidebarWidth):
                     NotifyPropertyChanged(nameof(SidebarWidth));
                     break;
+
+                case nameof(AppSettings.IsSidebarOpen):
+                    NotifyPropertyChanged(nameof(IsSidebarOpen));
+                    break;
             }
         }
 
@@ -83,7 +87,10 @@ namespace Files.Views
 
         private void Current_SizeChanged(object sender, WindowSizeChangedEventArgs e)
         {
-            IsWindowCompactSize = Window.Current.Bounds.Width <= 800;
+            if ((Window.Current.Content as Frame).CurrentSourcePageType != typeof(Settings))
+            {
+                IsWindowCompactSize = Window.Current.Bounds.Width <= 750;
+            }
         }
 
         private bool wasRightPaneVisible;
@@ -110,6 +117,43 @@ namespace Files.Views
                     }
                     NotifyPropertyChanged(nameof(IsWindowCompactSize));
                     NotifyPropertyChanged(nameof(IsMultiPaneEnabled));
+                    NotifyPropertyChanged(nameof(SidebarWidth));
+                    NotifyPropertyChanged(nameof(IsSidebarOpen));
+                }
+            }
+        }
+
+        public GridLength SidebarWidth
+        {
+            get => IsWindowCompactSize || !IsSidebarOpen ? CompactSidebarWidth : AppSettings.SidebarWidth;
+            set
+            {
+                if (IsWindowCompactSize || !IsSidebarOpen)
+                {
+                    return;
+                }
+                if (AppSettings.SidebarWidth != value)
+                {
+                    AppSettings.SidebarWidth = value;
+                    NotifyPropertyChanged(nameof(SidebarWidth));
+                }
+            }
+        }
+
+        public bool IsSidebarOpen
+        {
+            get => !IsWindowCompactSize && AppSettings.IsSidebarOpen;
+            set
+            {
+                if (IsWindowCompactSize)
+                {
+                    return;
+                }
+                if (AppSettings.IsSidebarOpen != value)
+                {
+                    AppSettings.IsSidebarOpen = value;
+                    NotifyPropertyChanged(nameof(SidebarWidth));
+                    NotifyPropertyChanged(nameof(IsSidebarOpen));
                 }
             }
         }
@@ -171,7 +215,6 @@ namespace Files.Views
                     NotifyPropertyChanged(nameof(ActivePane));
                     NotifyPropertyChanged(nameof(IsLeftPaneActive));
                     NotifyPropertyChanged(nameof(IsRightPaneActive));
-                    NotifyPropertyChanged(nameof(InteractionOperations));
                     NotifyPropertyChanged(nameof(FilesystemHelpers));
                     UpdateSidebarSelectedItem();
                 }
@@ -234,6 +277,7 @@ namespace Files.Views
         protected override void OnNavigatedTo(NavigationEventArgs eventArgs)
         {
             base.OnNavigatedTo(eventArgs);
+
             if (eventArgs.Parameter is string navPath)
             {
                 NavParamsLeft = navPath;
@@ -249,6 +293,7 @@ namespace Files.Views
 
         public void Dispose()
         {
+            this.Loaded -= PaneHolderPage_Loaded;
             PaneLeft?.Dispose();
             PaneRight?.Dispose();
             Window.Current.SizeChanged -= Current_SizeChanged;
@@ -471,7 +516,7 @@ namespace Files.Views
         {
             if (e.InvokedItemDataContext is DriveItem)
             {
-                await InteractionOperations.OpenPropertiesWindowAsync(e.InvokedItemDataContext);
+                await FilePropertiesHelpers.OpenPropertiesWindowAsync(e.InvokedItemDataContext, ActivePane);
             }
             else if (e.InvokedItemDataContext is LocationItem)
             {
@@ -483,7 +528,7 @@ namespace Files.Views
                     ItemType = "FileFolderListItem".GetLocalized(),
                     LoadFolderGlyph = true
                 };
-                await InteractionOperations.OpenPropertiesWindowAsync(listedItem);
+                await FilePropertiesHelpers.OpenPropertiesWindowAsync(listedItem, ActivePane);
             }
         }
 
