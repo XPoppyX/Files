@@ -15,13 +15,10 @@ namespace Files.Filesystem.FilesystemHistory
     {
         #region Private Members
 
-        private IFilesystemOperations filesystemOperations;
-
-        private IFilesystemHelpers filesystemHelpers;
-
-        private IShellPage associatedInstance;
-
         private readonly CancellationToken cancellationToken;
+        private IShellPage associatedInstance;
+        private IFilesystemHelpers filesystemHelpers;
+        private IFilesystemOperations filesystemOperations;
 
         #endregion Private Members
 
@@ -32,7 +29,7 @@ namespace Files.Filesystem.FilesystemHistory
             this.associatedInstance = associatedInstance;
             this.cancellationToken = cancellationToken;
             filesystemOperations = new FilesystemOperations(associatedInstance);
-            filesystemHelpers = new FilesystemHelpers(associatedInstance, cancellationToken);
+            filesystemHelpers = this.associatedInstance.FilesystemHelpers;
         }
 
         #endregion Constructor
