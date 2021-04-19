@@ -43,7 +43,7 @@
                 IsRightTapEnabled="True"
                 Loaded="Grid_Loaded"
                 RightTapped="StackPanel_RightTapped"
-                ToolTipService.ToolTip="{x:Bind ItemName, Mode=OneWay}">
+                ToolTipService.ToolTip="{x:Bind ItemTooltipText, Mode=OneWay}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
@@ -151,6 +151,7 @@
                         Grid.Column="1"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
+                        Visibility="{Binding IsOpen, ElementName=EditPopup, Converter={StaticResource NegatedBoolToVisibilityConverter}}"
                         Text="{x:Bind ItemName, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis"
                         TextWrapping="NoWrap" />
@@ -185,7 +186,7 @@
                 IsRightTapEnabled="True"
                 Loaded="Grid_Loaded"
                 RightTapped="StackPanel_RightTapped"
-                ToolTipService.ToolTip="{x:Bind ItemName, Mode=OneWay}">
+                ToolTipService.ToolTip="{x:Bind ItemTooltipText, Mode=OneWay}">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="90" />
