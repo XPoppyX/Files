@@ -262,6 +262,7 @@ namespace Files.Views
                 var lastCommonItemIndex = NavigationToolbar.PathComponents
                     .Select((value, index) => new { value, index })
                     .LastOrDefault(x => x.index < components.Count && x.value.Path == components[x.index].Path)?.index ?? 0;
+                NavigationToolbar.IsSingleItemOverride = false;
                 while (NavigationToolbar.PathComponents.Count > lastCommonItemIndex)
                 {
                     NavigationToolbar.PathComponents.RemoveAt(lastCommonItemIndex);
@@ -274,6 +275,7 @@ namespace Files.Views
             else
             {
                 NavigationToolbar.PathComponents.Clear(); // Clear the path UI
+                NavigationToolbar.IsSingleItemOverride = true;
                 NavigationToolbar.PathComponents.Add(new Views.PathBoxItem() { Path = null, Title = singleItemOverride });
             }
         }
@@ -933,7 +935,7 @@ namespace Files.Views
             var ctrl = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Control);
             var alt = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Menu);
             var shift = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Shift);
-            var tabInstance = CurrentPageType == typeof(GenericFileBrowser)
+            var tabInstance = CurrentPageType == typeof(GenericFileBrowser) || CurrentPageType == typeof(GenericFileBrowser2)
                 || CurrentPageType == typeof(GridViewBrowser);
 
             switch (c: ctrl, s: shift, a: alt, t: tabInstance, k: args.KeyboardAccelerator.Key)
@@ -1129,25 +1131,43 @@ namespace Files.Views
             {
                 return;
             }
-            string parentDirectoryOfPath = FilesystemViewModel.WorkingDirectory.TrimEnd('\\', '/');
-            var lastSlashIndex = parentDirectoryOfPath.LastIndexOf("\\");
-            if (lastSlashIndex == -1)
-            {
-                lastSlashIndex = parentDirectoryOfPath.LastIndexOf("/");
-            }
-            if (lastSlashIndex != -1)
-            {
-                parentDirectoryOfPath = FilesystemViewModel.WorkingDirectory.Remove(lastSlashIndex);
-            }
 
-            SelectSidebarItemFromPath();
-            ItemDisplayFrame.Navigate(InstanceViewModel.FolderSettings.GetLayoutType(parentDirectoryOfPath),
+            bool isPathRooted = FilesystemViewModel.WorkingDirectory == PathNormalization.GetPathRoot(FilesystemViewModel.WorkingDirectory);
+
+            if (isPathRooted)
+            {
+                ItemDisplayFrame.Navigate(typeof(WidgetsPage),
                                           new NavigationArguments()
                                           {
-                                              NavPathParam = parentDirectoryOfPath,
+                                              NavPathParam = "NewTab".GetLocalized(),
                                               AssociatedTabInstance = this
                                           },
                                           new SuppressNavigationTransitionInfo());
+            }
+            else
+            {
+
+                string parentDirectoryOfPath = FilesystemViewModel.WorkingDirectory.TrimEnd('\\', '/');
+
+                var lastSlashIndex = parentDirectoryOfPath.LastIndexOf("\\");
+                if (lastSlashIndex == -1)
+                {
+                    lastSlashIndex = parentDirectoryOfPath.LastIndexOf("/");
+                }
+                if (lastSlashIndex != -1)
+                {
+                    parentDirectoryOfPath = FilesystemViewModel.WorkingDirectory.Remove(lastSlashIndex);
+                }
+
+                SelectSidebarItemFromPath();
+                ItemDisplayFrame.Navigate(InstanceViewModel.FolderSettings.GetLayoutType(parentDirectoryOfPath),
+                                              new NavigationArguments()
+                                              {
+                                                  NavPathParam = parentDirectoryOfPath,
+                                                  AssociatedTabInstance = this
+                                              },
+                                              new SuppressNavigationTransitionInfo());
+            }
         }
 
         private void SelectSidebarItemFromPath(Type incomingSourcePageType = null)
