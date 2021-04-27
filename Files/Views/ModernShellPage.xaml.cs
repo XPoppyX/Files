@@ -47,7 +47,7 @@ namespace Files.Views
         public IFilesystemHelpers FilesystemHelpers { get; private set; }
         private CancellationTokenSource cancellationTokenSource;
         public SettingsViewModel AppSettings => App.AppSettings;
-        public IStatusCenterActions StatusCenterActions => StatusCenterViewModel; 
+        public IStatusCenterActions StatusCenterActions => StatusCenterViewModel;
         public bool CanNavigateBackward => ItemDisplayFrame.CanGoBack;
         public bool CanNavigateForward => ItemDisplayFrame.CanGoForward;
 
@@ -178,20 +178,7 @@ namespace Files.Views
                 FlowDirection = FlowDirection.RightToLeft;
             }
 
-            NavigationToolbar.EditModeEnabled += NavigationToolbar_EditModeEnabled;
-            NavigationToolbar.PathBoxQuerySubmitted += NavigationToolbar_QuerySubmitted;
-            NavigationToolbar.SearchQuerySubmitted += ModernShellPage_SearchQuerySubmitted;
-            NavigationToolbar.SearchTextChanged += ModernShellPage_SearchTextChanged;
-            NavigationToolbar.SearchSuggestionChosen += ModernShellPage_SearchSuggestionChosen;
-            NavigationToolbar.BackRequested += ModernShellPage_BackNavRequested;
-            NavigationToolbar.ForwardRequested += ModernShellPage_ForwardNavRequested;
-            NavigationToolbar.UpRequested += ModernShellPage_UpNavRequested;
-            NavigationToolbar.RefreshRequested += ModernShellPage_RefreshRequested;
-            NavigationToolbar.RefreshWidgetsRequested += ModernShellPage_RefreshWidgetsRequested;
-            NavigationToolbar.ItemDraggedOverPathItem += ModernShellPage_NavigationRequested;
             NavigationToolbar.PathControlDisplayText = "NewTab".GetLocalized();
-            NavigationToolbar.CanGoBack = false;
-            NavigationToolbar.CanGoForward = false;
 
             if (NavigationToolbar is NavigationToolbar navToolbar)
             {
@@ -262,7 +249,6 @@ namespace Files.Views
                 var lastCommonItemIndex = NavigationToolbar.PathComponents
                     .Select((value, index) => new { value, index })
                     .LastOrDefault(x => x.index < components.Count && x.value.Path == components[x.index].Path)?.index ?? 0;
-                NavigationToolbar.IsSingleItemOverride = false;
                 while (NavigationToolbar.PathComponents.Count > lastCommonItemIndex)
                 {
                     NavigationToolbar.PathComponents.RemoveAt(lastCommonItemIndex);
@@ -275,7 +261,6 @@ namespace Files.Views
             else
             {
                 NavigationToolbar.PathComponents.Clear(); // Clear the path UI
-                NavigationToolbar.IsSingleItemOverride = true;
                 NavigationToolbar.PathComponents.Add(new Views.PathBoxItem() { Path = null, Title = singleItemOverride });
             }
         }
@@ -918,15 +903,6 @@ namespace Files.Views
                 InitialPageType = typeof(ModernShellPage),
                 NavigationArg = parameters.IsSearchResultPage ? parameters.SearchPathParam : parameters.NavPathParam
             };
-
-            if (ItemDisplayFrame.CurrentSourcePageType == typeof(WidgetsPage))
-            {
-                UpdatePositioning(true);
-            }
-            else
-            {
-                UpdatePositioning();
-            }
         }
 
         private async void KeyboardAccelerator_Invoked(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
@@ -935,7 +911,7 @@ namespace Files.Views
             var ctrl = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Control);
             var alt = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Menu);
             var shift = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Shift);
-            var tabInstance = CurrentPageType == typeof(GenericFileBrowser) || CurrentPageType == typeof(GenericFileBrowser2)
+            var tabInstance = CurrentPageType == typeof(GenericFileBrowser)
                 || CurrentPageType == typeof(GridViewBrowser);
 
             switch (c: ctrl, s: shift, a: alt, t: tabInstance, k: args.KeyboardAccelerator.Key)
@@ -1036,7 +1012,7 @@ namespace Files.Views
                     break;
 
                 case (true, false, false, true, VirtualKey.P):
-                    AppSettings.PreviewPaneEnabled = !AppSettings.PreviewPaneEnabled;
+                    PreviewPaneEnabled = !PreviewPaneEnabled;
                     break;
 
                 case (true, false, false, true, VirtualKey.R): // ctrl + r, refresh
@@ -1146,7 +1122,6 @@ namespace Files.Views
             }
             else
             {
-
                 string parentDirectoryOfPath = FilesystemViewModel.WorkingDirectory.TrimEnd('\\', '/');
 
                 var lastSlashIndex = parentDirectoryOfPath.LastIndexOf("\\");
@@ -1194,7 +1169,6 @@ namespace Files.Views
             NavigationToolbar.RefreshRequested -= ModernShellPage_RefreshRequested;
             NavigationToolbar.RefreshWidgetsRequested += ModernShellPage_RefreshWidgetsRequested;
             NavigationToolbar.ItemDraggedOverPathItem -= ModernShellPage_NavigationRequested;
-
             if (NavigationToolbar is NavigationToolbar navToolbar)
             {
                 navToolbar.ToolbarPathItemInvoked -= ModernShellPage_NavigationRequested;
@@ -1312,45 +1286,21 @@ namespace Files.Views
             return DataPackageOperation.None;
         }
 
-        // This is needed so the layout can be updated when the preview pane is opened
-        public bool PreviewPaneEnabled
-        {
-            get => AppSettings.PreviewPaneEnabled;
-            set
-            {
-                AppSettings.PreviewPaneEnabled = value;
-                NotifyPropertyChanged(nameof(PreviewPaneEnabled));
-                UpdatePositioning();
-            }
-        }
-
         private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            UpdatePositioning(!InstanceViewModel.IsPageTypeNotHome);
+            UpdatePositioning();
         }
 
         /// <summary>
         /// Call this function to update the positioning of the preview pane.
         /// This is a workaround as the VisualStateManager causes problems.
         /// </summary>
-        private void UpdatePositioning(bool IsHome = false)
+        private void UpdatePositioning()
         {
-            if (!AppSettings.PreviewPaneEnabled || IsHome)
+            if (!LoadPreviewPane || PreviewPaneDropShadowPanel is null || PreviewPane is null)
             {
                 PreviewPaneRow.Height = new GridLength(0);
                 PreviewPaneColumn.Width = new GridLength(0);
-                if (PreviewPaneGridSplitter != null)
-                {
-                    PreviewPaneGridSplitter.Visibility = Visibility.Collapsed;
-                }
-
-                if (PreviewPane != null)
-                {
-                    PreviewPane.Visibility = Visibility.Collapsed;
-                    PreviewPaneDropShadowPanel.Visibility = Visibility.Collapsed;
-                }
-
-                PreviewPaneDropShadowPanel.ShadowOpacity = 0.00;
             }
             else if (RootGrid.ActualWidth > 800)
             {
@@ -1369,10 +1319,6 @@ namespace Files.Views
                 PreviewPaneRow.Height = new GridLength(0);
                 PreviewPaneColumn.Width = AppSettings.PreviewPaneSizeVertical;
                 PreviewPane.IsHorizontal = false;
-
-                PreviewPane.Visibility = Visibility.Visible;
-                PreviewPaneGridSplitter.Visibility = Visibility.Visible;
-                PreviewPaneDropShadowPanel.Visibility = Visibility.Visible;
             }
             else if (RootGrid.ActualWidth <= 800)
             {
@@ -1391,10 +1337,6 @@ namespace Files.Views
                 PreviewPaneGridSplitter.Height = 2;
                 PreviewPaneGridSplitter.Width = RootGrid.Width;
                 PreviewPane.IsHorizontal = true;
-
-                PreviewPane.Visibility = Visibility.Visible;
-                PreviewPaneGridSplitter.Visibility = Visibility.Visible;
-                PreviewPaneDropShadowPanel.Visibility = Visibility.Visible;
             }
         }
 
@@ -1436,7 +1378,7 @@ namespace Files.Views
             }
             else
             {
-                if (string.IsNullOrEmpty(navigationPath) 
+                if (string.IsNullOrEmpty(navigationPath)
                     || string.IsNullOrEmpty(FilesystemViewModel?.WorkingDirectory)
                     || navigationPath.TrimEnd(Path.DirectorySeparatorChar).Equals(
                         FilesystemViewModel.WorkingDirectory.TrimEnd(Path.DirectorySeparatorChar),
@@ -1447,7 +1389,7 @@ namespace Files.Views
 
                 NavigationTransitionInfo transition = new SuppressNavigationTransitionInfo();
 
-                if (sourcePageType == typeof(WidgetsPage) 
+                if (sourcePageType == typeof(WidgetsPage)
                     || ItemDisplayFrame.Content.GetType() == typeof(WidgetsPage) && (sourcePageType == typeof(GenericFileBrowser) || sourcePageType == typeof(GridViewBrowser)))
                 {
                     transition = new EntranceNavigationTransitionInfo();
@@ -1469,6 +1411,36 @@ namespace Files.Views
         public void RemoveLastPageFromBackStack()
         {
             ItemDisplayFrame.BackStack.Remove(ItemDisplayFrame.BackStack.Last());
+        }
+
+        public bool LoadPreviewPane => PreviewPaneEnabled && InstanceViewModel.IsPageTypeNotHome;
+
+        public void LoadPreviewPaneChanged()
+        {
+            NotifyPropertyChanged(nameof(LoadPreviewPane));
+        }
+
+        private void PreviewPane_Loading(FrameworkElement sender, object args)
+        {
+            UpdatePositioning();
+        }
+
+        private bool previewPaneEnabled = App.AppSettings.PreviewPaneEnabled;
+        // This is needed so the layout can be updated when the preview pane is opened
+        public bool PreviewPaneEnabled
+        {
+            get => previewPaneEnabled;
+            set
+            {
+                if(value != previewPaneEnabled)
+                {
+                    previewPaneEnabled = value;
+                    AppSettings.PreviewPaneEnabled = value;
+                    NotifyPropertyChanged(nameof(PreviewPaneEnabled));
+                    NotifyPropertyChanged(nameof(LoadPreviewPane));
+                    UpdatePositioning();
+                }
+            }
         }
     }
 
