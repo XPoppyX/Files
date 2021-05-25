@@ -704,8 +704,9 @@
           <target state="translated">Fájlok beillesztése</target>
         </trans-unit>
         <trans-unit id="RecycleInProgress.Title" translate="yes" xml:space="preserve">
-          <source>Moving files to Recycle Bin</source>
-          <target state="translated">Fájlok áthelyezése a lomtárba</target>
+          <source>Moving files to the Recycle Bin</source>
+          <target state="needs-review-translation">Fájlok áthelyezése a lomtárba</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="BaseLayoutContextFlyoutPinDirectoryToSidebar.Text" translate="yes" xml:space="preserve">
           <source>Pin directory to sidebar</source>
@@ -1841,10 +1842,6 @@
           <source>Remove</source>
           <target state="translated">Törlés</target>
         </trans-unit>
-        <trans-unit id="SettingsUseFileListCache.Header" translate="yes" xml:space="preserve">
-          <source>Cache files and folders for better performance</source>
-          <target state="translated">Fájlok és mappák gyorsítótárazása a jobb teljesítményért</target>
-        </trans-unit>
         <trans-unit id="ItemAlreadyExistsDialogCloseButtonText" translate="yes" xml:space="preserve">
           <source>Cancel</source>
           <target state="translated">Mégse</target>
@@ -1899,28 +1896,33 @@
           <target state="translated">Mappák</target>
         </trans-unit>
         <trans-unit id="NavToolbarDetailsView.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Details View</source>
-          <target state="translated">Részletek</target>
+          <source>Details View (Ctrl+Shift+1)</source>
+          <target state="needs-review-translation">Részletek</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="NavToolbarGridViewLarge.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Grid View (Large)</source>
-          <target state="translated">Nagy ikonok</target>
+          <source>Grid View (Large) (Ctrl+Shift+5)</source>
+          <target state="needs-review-translation">Nagy ikonok</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="NavToolbarGridViewMedium.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Grid View (Medium)</source>
-          <target state="translated">Közepes ikonok</target>
+          <source>Grid View (Medium) (Ctrl+Shift+4)</source>
+          <target state="needs-review-translation">Közepes ikonok</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="NavToolbarGridViewSmall.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Grid View (Small)</source>
-          <target state="translated">Kis ikonok</target>
+          <source>Grid View (Small) (Ctrl+Shift+3)</source>
+          <target state="needs-review-translation">Kis ikonok</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="NavToolbarTilesView.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Tiles View</source>
-          <target state="translated">Lista</target>
+          <source>Tiles View (Ctrl+Shift+2)</source>
+          <target state="needs-review-translation">Lista</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="NavToolbarLayoutMode.Text" translate="yes" xml:space="preserve">
           <source>Layout Mode</source>
-          <target state="translated">Rendezés</target>
+          <target state="translated">Elrendezés</target>
         </trans-unit>
         <trans-unit id="NavToolbarDisplayOptions.Text" translate="yes" xml:space="preserve">
           <source>Display Options</source>
@@ -2245,14 +2247,6 @@
           <source>Disconnect</source>
           <target state="translated">Szétkapcsolás</target>
         </trans-unit>
-        <trans-unit id="PreemptiveCacheParallelLimit.Header" translate="yes" xml:space="preserve">
-          <source>Preemptive cache parallel limit (smaller numbers should work better for hard drives)</source>
-          <target state="translated">Előzetes gyorsítótár szálak maximális száma (kisebb érték jobb lehet HDD esetén)</target>
-        </trans-unit>
-        <trans-unit id="SettingsUsePreemptiveCache.Header" translate="yes" xml:space="preserve">
-          <source>Use preemptive cache (preload entries in child directories on navigation)</source>
-          <target state="translated">Előzetes gyorsítótárazás (almappák beolvasása navigáláskor)</target>
-        </trans-unit>
         <trans-unit id="BundlesWidgetMoreOptionsButton.AutomationProperties.Name" translate="yes" xml:space="preserve">
           <source>More bundles options</source>
           <target state="translated">További munkaterület lehetőségek</target>
@@ -2326,24 +2320,28 @@
           <target state="translated">Ismeretlen hiba történt.</target>
         </trans-unit>
         <trans-unit id="StatusDeletionComplete" translate="yes" xml:space="preserve">
-          <source>Deletion Complete</source>
-          <target state="translated">Törlés befelyezve</target>
+          <source>Deletion complete</source>
+          <target state="needs-review-translation">Törlés befelyezve</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="StatusOperationCompleted" translate="yes" xml:space="preserve">
           <source>The operation has completed.</source>
           <target state="translated">Művelet befelyezve.</target>
         </trans-unit>
         <trans-unit id="StatusRecycleComplete" translate="yes" xml:space="preserve">
-          <source>Recycle Complete</source>
-          <target state="translated">Újrahasznosítás befelyezve</target>
+          <source>Recycle complete</source>
+          <target state="needs-review-translation">Újrahasznosítás befelyezve</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="StatusMoveComplete" translate="yes" xml:space="preserve">
-          <source>Move Complete</source>
-          <target state="translated">Áthelyezés befelyezve</target>
+          <source>Move complete</source>
+          <target state="needs-review-translation">Áthelyezés befelyezve</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="StatusCopyComplete" translate="yes" xml:space="preserve">
-          <source>Copy Complete</source>
-          <target state="translated">Másolás befelyezve</target>
+          <source>Copy complete</source>
+          <target state="needs-review-translation">Másolás befelyezve</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="ElevateConfirmDialog.CloseButtonText" translate="yes" xml:space="preserve">
           <source>No</source>
@@ -2386,8 +2384,9 @@
           <target state="translated">Oszlop</target>
         </trans-unit>
         <trans-unit id="NavToolbarColumnView.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
-          <source>Column View</source>
-          <target state="translated">Oszlop</target>
+          <source>Column View (Ctrl+Shift+6)</source>
+          <target state="needs-review-translation">Oszlop</target>
+          <note from="MultilingualUpdate" annotates="source" priority="2">Please verify the translation’s accuracy as the source string was updated after it was translated.</note>
         </trans-unit>
         <trans-unit id="BaseLayoutContextFlyoutColumn.Text" translate="yes" xml:space="preserve">
           <source>Column View</source>
@@ -2627,10 +2626,6 @@
           <source>Open themes folder</source>
           <target state="translated">Téma mappa megnyitása</target>
         </trans-unit>
-        <trans-unit id="SettingsUseNewDetailsView.Header" translate="yes" xml:space="preserve">
-          <source>Use new details view</source>
-          <target state="translated">Új részletek nézet használata</target>
-        </trans-unit>
         <trans-unit id="FileBrowserSortOption_Name.Text" translate="yes" xml:space="preserve">
           <source>Name</source>
           <target state="translated">Név</target>
@@ -2781,147 +2776,303 @@
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOptionsButton.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
           <source>Arrangement options</source>
-          <target state="new">Arrangement options</target>
+          <target state="translated">Elrendezési lehetőségek</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOptionsButton.AutomationProperties.Name" translate="yes" xml:space="preserve">
           <source>Arrangement options</source>
-          <target state="new">Arrangement options</target>
+          <target state="translated">Elrendezési lehetőségek</target>
         </trans-unit>
         <trans-unit id="NavToolbarGroupByRadioButtons.Header" translate="yes" xml:space="preserve">
           <source>Group By</source>
-          <target state="new">Group By</target>
+          <target state="translated">Csoportosítás</target>
         </trans-unit>
         <trans-unit id="NavToolbarGroupByOption_None.Content" translate="yes" xml:space="preserve">
           <source>None</source>
-          <target state="new">None</target>
+          <target state="translated">Nincs</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_Name.Content" translate="yes" xml:space="preserve">
           <source>Name</source>
-          <target state="new">Name</target>
+          <target state="translated">Név</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_DateModified.Content" translate="yes" xml:space="preserve">
           <source>Date modified</source>
-          <target state="new">Date modified</target>
+          <target state="translated">Módosítás dátuma</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_DateCreated.Content" translate="yes" xml:space="preserve">
           <source>Date created</source>
-          <target state="new">Date created</target>
+          <target state="translated">Létrehozás dátuma</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_Size.Content" translate="yes" xml:space="preserve">
           <source>Size</source>
-          <target state="new">Size</target>
+          <target state="translated">Méret</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_DateDeleted.Content" translate="yes" xml:space="preserve">
           <source>Date deleted</source>
-          <target state="new">Date deleted</target>
+          <target state="translated">Törlés dátuma</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_OriginalFolder.Content" translate="yes" xml:space="preserve">
           <source>Original folder</source>
-          <target state="new">Original folder</target>
+          <target state="translated">Eredeti mappa</target>
         </trans-unit>
         <trans-unit id="NavToolbarArrangementOption_Type.Content" translate="yes" xml:space="preserve">
           <source>Type</source>
-          <target state="new">Type</target>
+          <target state="translated">Típus</target>
         </trans-unit>
         <trans-unit id="NavToolbarSortByRadioButtons.Header" translate="yes" xml:space="preserve">
           <source>Sort By</source>
-          <target state="new">Sort By</target>
+          <target state="translated">Rendezés</target>
         </trans-unit>
         <trans-unit id="NavToolbarSortDirectionRadioButtons.Header" translate="yes" xml:space="preserve">
           <source>Sort direction</source>
-          <target state="new">Sort direction</target>
+          <target state="translated">Rendezés iránya</target>
         </trans-unit>
         <trans-unit id="NavToolbarSortDirectionOption_Ascending.Content" translate="yes" xml:space="preserve">
           <source>Ascending</source>
-          <target state="new">Ascending</target>
+          <target state="translated">Növekvő</target>
         </trans-unit>
         <trans-unit id="NavToolbarSortDirectionOption_Descending.Content" translate="yes" xml:space="preserve">
           <source>Descending</source>
-          <target state="new">Descending</target>
+          <target state="translated">Csökkenő</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_Huge" translate="yes" xml:space="preserve">
           <source>Huge</source>
-          <target state="new">Huge</target>
+          <target state="translated">Hatalmas</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_VeryLarge" translate="yes" xml:space="preserve">
           <source>Very large</source>
-          <target state="new">Very large</target>
+          <target state="translated">Nagyon nagy</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_Large" translate="yes" xml:space="preserve">
           <source>Large</source>
-          <target state="new">Large</target>
+          <target state="translated">Nagy</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_Medium" translate="yes" xml:space="preserve">
           <source>Medium</source>
-          <target state="new">Medium</target>
+          <target state="translated">Közepes</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_Small" translate="yes" xml:space="preserve">
           <source>Small</source>
-          <target state="new">Small</target>
+          <target state="translated">Kicsi</target>
         </trans-unit>
         <trans-unit id="ItemSizeText_Tiny" translate="yes" xml:space="preserve">
           <source>Tiny</source>
-          <target state="new">Tiny</target>
+          <target state="translated">Apró</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_Today" translate="yes" xml:space="preserve">
           <source>Today</source>
-          <target state="new">Today</target>
+          <target state="translated">Ma</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_Yesterday" translate="yes" xml:space="preserve">
           <source>Yesterday</source>
-          <target state="new">Yesterday</target>
+          <target state="translated">Tegnap</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_ThisWeek" translate="yes" xml:space="preserve">
           <source>Earlier this week</source>
-          <target state="new">Earlier this week</target>
+          <target state="translated">Ezen a héten</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_LastWeek" translate="yes" xml:space="preserve">
           <source>Last week</source>
-          <target state="new">Last week</target>
+          <target state="translated">Előző héten</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_ThisMonth" translate="yes" xml:space="preserve">
           <source>This month</source>
-          <target state="new">This month</target>
+          <target state="translated">Ebben a hónapban</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_LastMonth" translate="yes" xml:space="preserve">
           <source>Last month</source>
-          <target state="new">Last month</target>
+          <target state="translated">Előző hónapban</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_ThisYear" translate="yes" xml:space="preserve">
           <source>This year</source>
-          <target state="new">This year</target>
+          <target state="translated">Idén</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_Older" translate="yes" xml:space="preserve">
           <source>Older</source>
-          <target state="new">Older</target>
+          <target state="translated">Régebben</target>
         </trans-unit>
         <trans-unit id="ItemTimeText_Before" translate="yes" xml:space="preserve">
           <source>Before {0}</source>
-          <target state="new">Before {0}</target>
+          <target state="translated">{0} előtt</target>
         </trans-unit>
         <trans-unit id="GroupItemsCount_Singular" translate="yes" xml:space="preserve">
           <source>{0} item</source>
-          <target state="new">{0} item</target>
+          <target state="translated">{0} elem</target>
         </trans-unit>
         <trans-unit id="GroupItemsCount_Plural" translate="yes" xml:space="preserve">
           <source>{0} items</source>
-          <target state="new">{0} items</target>
+          <target state="translated">{0} elem</target>
         </trans-unit>
         <trans-unit id="HorizontalMultitaskingControlReopenClosedTab.Text" translate="yes" xml:space="preserve">
           <source>Reopen closed tab</source>
-          <target state="new">Reopen closed tab</target>
+          <target state="translated">Bezárt lap újranyitása</target>
         </trans-unit>
         <trans-unit id="SettingsAboutPrivacyPolicy.Text" translate="yes" xml:space="preserve">
           <source>Privacy policy</source>
-          <target state="new">Privacy policy</target>
+          <target state="translated">Adatvédelmi irányelvek</target>
         </trans-unit>
         <trans-unit id="SettingsAboutPrivacyPolicyDescription.Text" translate="yes" xml:space="preserve">
           <source>View Files privacy policy</source>
-          <target state="new">View Files privacy policy</target>
+          <target state="translated">A Files program adatvédelmi irányelvei</target>
         </trans-unit>
         <trans-unit id="SettingsAboutPrivacyPolicyListViewItem.AutomationProperties.Name" translate="yes" xml:space="preserve">
           <source>View Files privacy policy</source>
-          <target state="new">View Files privacy policy</target>
+          <target state="translated">A Files program adatvédelmi irányelvei</target>
+        </trans-unit>
+        <trans-unit id="RenameFileDialogTitle" translate="yes" xml:space="preserve">
+          <source>Rename</source>
+          <target state="translated">Átnevezés</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletionCancelled" translate="yes" xml:space="preserve">
+          <source>Deletion cancelled</source>
+          <target state="new">Deletion cancelled</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveCanceled" translate="yes" xml:space="preserve">
+          <source>Move canceled</source>
+          <target state="new">Move canceled</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyCanceled" translate="yes" xml:space="preserve">
+          <source>Copy canceled</source>
+          <target state="new">Copy canceled</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveCanceledDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Moving {0} item from {1} to {2} was canceled</source>
+          <target state="new">Moving {0} item from {1} to {2} was canceled</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveCanceledDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Moving {0} items from {1} to {2} was canceled after moving {3} items</source>
+          <target state="new">Moving {0} items from {1} to {2} was canceled after moving {3} items</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveCanceledDetails_Plural2" translate="yes" xml:space="preserve">
+          <source>Moving {0} items from {1} to {2} was canceled after moving {3} item</source>
+          <target state="new">Moving {0} items from {1} to {2} was canceled after moving {3} item</target>
+        </trans-unit>
+        <trans-unit id="StatusMovingItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Moving {0} item from {1} to {2}</source>
+          <target state="new">Moving {0} item from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusMovingItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Moving {0} items from {1} to {2}</source>
+          <target state="new">Moving {0} items from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusMovedItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Successfully moved {0} item from {1} to {2}</source>
+          <target state="new">Successfully moved {0} item from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusMovedItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Successfully moved {0} items from {1} to {2}</source>
+          <target state="new">Successfully moved {0} items from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveFailedDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Failed to move {0} item from {1} to {2}</source>
+          <target state="new">Failed to move {0} item from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusMoveFailedDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Failed to move {0} items from {1} to {2}</source>
+          <target state="new">Failed to move {0} items from {1} to {2}</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyCanceledDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Copying {0} item to {1} was canceled</source>
+          <target state="new">Copying {0} item to {1} was canceled</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyCanceledDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Copying {0} items to {1} was canceled after copying {2} items</source>
+          <target state="new">Copying {0} items to {1} was canceled after copying {2} items</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyCanceledDetails_Plural2" translate="yes" xml:space="preserve">
+          <source>Copying {0} items to {1} was canceled after copying {2} item</source>
+          <target state="new">Copying {0} items to {1} was canceled after copying {2} item</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyingItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Copying {0} item to {1}</source>
+          <target state="new">Copying {0} item to {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusCopyingItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Copying {0} items to {1}</source>
+          <target state="new">Copying {0} items to {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusCopiedItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Successfully copied {0} item to {1}</source>
+          <target state="new">Successfully copied {0} item to {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusCopiedItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Successfully copied {0} items to {1}</source>
+          <target state="new">Successfully copied {0} items to {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeleteCanceledDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Deleting {0} item from {1} was canceled</source>
+          <target state="new">Deleting {0} item from {1} was canceled</target>
+        </trans-unit>
+        <trans-unit id="StatusDeleteCanceledDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Deleting {0} items from {1} was canceled after deleting {3} items</source>
+          <target state="new">Deleting {0} items from {1} was canceled after deleting {3} items</target>
+        </trans-unit>
+        <trans-unit id="StatusDeleteCanceledDetails_Plural2" translate="yes" xml:space="preserve">
+          <source>Deleting {0} items from {1} was canceled after deleting {3} item</source>
+          <target state="new">Deleting {0} items from {1} was canceled after deleting {3} item</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletingItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Deleting {0} item from {1}</source>
+          <target state="new">Deleting {0} item from {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletingItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Deleting {0} items from {1}</source>
+          <target state="new">Deleting {0} items from {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletedItemsDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Successfully deleted {0} item from {1}</source>
+          <target state="new">Successfully deleted {0} item from {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletedItemsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Successfully deleted {0} items from {1}</source>
+          <target state="new">Successfully deleted {0} items from {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletionFailedDetails_Singular" translate="yes" xml:space="preserve">
+          <source>Failed to delete {0} item from {1}</source>
+          <target state="new">Failed to delete {0} item from {1}</target>
+        </trans-unit>
+        <trans-unit id="StatusDeletionFailedDetailsDetails_Plural" translate="yes" xml:space="preserve">
+          <source>Failed to delete {0} items from {1}</source>
+          <target state="new">Failed to delete {0} items from {1}</target>
+        </trans-unit>
+        <trans-unit id="TheRecycleBin" translate="yes" xml:space="preserve">
+          <source>the Recycle Bin</source>
+          <target state="new">the Recycle Bin</target>
+        </trans-unit>
+        <trans-unit id="MoveInProgress" translate="yes" xml:space="preserve">
+          <source>Moving items</source>
+          <target state="new">Moving items</target>
+        </trans-unit>
+        <trans-unit id="CopyInProgress.Title" translate="yes" xml:space="preserve">
+          <source>Copying items</source>
+          <target state="new">Copying items</target>
+        </trans-unit>
+        <trans-unit id="StatusRecycleFailed" translate="yes" xml:space="preserve">
+          <source>Recycle failed</source>
+          <target state="new">Recycle failed</target>
+        </trans-unit>
+        <trans-unit id="StatusRecycleCancelled" translate="yes" xml:space="preserve">
+          <source>Recycle cancelled</source>
+          <target state="new">Recycle cancelled</target>
+        </trans-unit>
+        <trans-unit id="StatusCancellingOp" translate="yes" xml:space="preserve">
+          <source>canceling</source>
+          <target state="new">canceling</target>
+        </trans-unit>
+        <trans-unit id="StatusCenterDismissBannerButton.AutomationProperties.Name" translate="yes" xml:space="preserve">
+          <source>Dismiss</source>
+          <target state="new">Dismiss</target>
+        </trans-unit>
+        <trans-unit id="StatusCenterDismissBannerButton.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
+          <source>Dismiss</source>
+          <target state="new">Dismiss</target>
+        </trans-unit>
+        <trans-unit id="StatusCenterCancelBannerButton.AutomationProperties.Name" translate="yes" xml:space="preserve">
+          <source>Cancel</source>
+          <target state="new">Cancel</target>
+        </trans-unit>
+        <trans-unit id="StatusCenterCancelBannerButton.ToolTipService.ToolTip" translate="yes" xml:space="preserve">
+          <source>Cancel</source>
+          <target state="new">Cancel</target>
         </trans-unit>
       </group>
     </body>

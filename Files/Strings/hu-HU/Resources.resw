@@ -1377,9 +1377,6 @@
   <data name="AppBarButtonRemove.Label" xml:space="preserve">
     <value>Törlés</value>
   </data>
-  <data name="SettingsUseFileListCache.Header" xml:space="preserve">
-    <value>Fájlok és mappák gyorsítótárazása a jobb teljesítményért</value>
-  </data>
   <data name="ItemAlreadyExistsDialogCloseButtonText" xml:space="preserve">
     <value>Mégse</value>
   </data>
@@ -1677,12 +1674,6 @@
   <data name="SideBarDisconnectNetworkDrive.Text" xml:space="preserve">
     <value>Szétkapcsolás</value>
   </data>
-  <data name="PreemptiveCacheParallelLimit.Header" xml:space="preserve">
-    <value>Előzetes gyorsítótár szálak maximális száma (kisebb érték jobb lehet HDD esetén)</value>
-  </data>
-  <data name="SettingsUsePreemptiveCache.Header" xml:space="preserve">
-    <value>Előzetes gyorsítótárazás (almappák beolvasása navigáláskor)</value>
-  </data>
   <data name="BundlesWidgetMoreOptionsButton.AutomationProperties.Name" xml:space="preserve">
     <value>További munkaterület lehetőségek</value>
   </data>
@@ -1955,9 +1946,6 @@
   </data>
   <data name="SettingsAppearanceOpenThemesFolderButton.Content" xml:space="preserve">
     <value>Téma mappa megnyitása</value>
-  </data>
-  <data name="SettingsUseNewDetailsView.Header" xml:space="preserve">
-    <value>Új részletek nézet használata</value>
   </data>
   <data name="FileBrowserSortOption_Name.Text" xml:space="preserve">
     <value>Név</value>

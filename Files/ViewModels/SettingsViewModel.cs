@@ -91,7 +91,7 @@ namespace Files.ViewModels
             await Launcher.LaunchFolderAsync(ApplicationData.Current.LocalFolder);
         }
 
-        public static void OpenThemesFolder()
+        public static async void OpenThemesFolder()
         {
             Frame rootFrame = Window.Current.Content as Frame;
             // Go back to main page
@@ -99,7 +99,7 @@ namespace Files.ViewModels
             {
                 rootFrame.GoBack();
             }
-            NavigationHelpers.OpenPathInNewTab(App.ExternalResourcesHelper.ThemeFolder.Path);
+            await NavigationHelpers.OpenPathInNewTab(App.ExternalResourcesHelper.ThemeFolder.Path);
         }
 
         public static async void ReportIssueOnGitHub()
@@ -576,41 +576,6 @@ namespace Files.ViewModels
             set => Set(value);
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to cache files and folders.
-        /// </summary>
-        public bool UseFileListCache
-        {
-            get => Get(false);
-            set => Set(value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether or not to use preemptive caching.
-        /// </summary>
-        public bool UsePreemptiveCache
-        {
-            get => Get(false);
-            set => Set(value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value indicating the limit of parallel preemptive cache loading limit.
-        /// </summary>
-        public int PreemptiveCacheParallelLimit
-        {
-            get => Get(2);
-            set => Set(value);
-        }
-
-        /// <summary>
-        /// Gets or sets a value whether or not to enable the new list view based details view.
-        /// </summary>
-        public bool UseNewDetailsView
-        {
-            get => Get(false);
-            set => Set(value);
-        }
 
         #endregion Experimental
 
@@ -734,8 +699,8 @@ namespace Files.ViewModels
             get => (SortOption)Get((byte)SortOption.Name);
             set => Set((byte)value);
         }
-        
-        
+
+
         public GroupOption DefaultDirectoryGroupOption
         {
             get => (GroupOption)Get((byte)GroupOption.None);

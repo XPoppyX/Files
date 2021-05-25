@@ -177,6 +177,10 @@ namespace Files.Views
             FilesystemHelpers = new FilesystemHelpers(this, cancellationTokenSource.Token);
             storageHistoryHelpers = new StorageHistoryHelpers(new StorageHistoryOperations(this, cancellationTokenSource.Token));
 
+            NavToolbar.SearchBox.QueryChanged += ModernShellPage_QueryChanged;
+            NavToolbar.SearchBox.QuerySubmitted += ModernShellPage_QuerySubmitted;
+            NavToolbar.SearchBox.SuggestionChosen += ModernShellPage_SuggestionChosen;
+
             DisplayFilesystemConsentDialog();
 
             var flowDirectionSetting = ResourceContext.GetForCurrentView().QualifierValues["LayoutDirection"];
@@ -273,7 +277,7 @@ namespace Files.Views
             }
         }
 
-        private async void ModernShellPage_SearchSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+        private async void ModernShellPage_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
         {
             var invokedItem = (args.SelectedItem as ListedItem);
             if (invokedItem.PrimaryItemAttribute == StorageItemTypes.Folder)
@@ -291,13 +295,20 @@ namespace Files.Views
             }
         }
 
-        private async void ModernShellPage_SearchTextChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+        private async void ModernShellPage_QueryChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
         {
             if (args.Reason == AutoSuggestionBoxTextChangeReason.UserInput)
             {
                 if (!string.IsNullOrWhiteSpace(sender.Text))
                 {
-                    sender.ItemsSource = await FolderSearch.SearchForUserQueryTextAsync(sender.Text, FilesystemViewModel.WorkingDirectory, this, App.AppSettings.SearchUnindexedItems);
+                    var search = new FolderSearch
+                    {
+                        Query = sender.Text,
+                        Folder = FilesystemViewModel.WorkingDirectory,
+                        MaxItemCount = 10,
+                        SearchUnindexedItems = App.AppSettings.SearchUnindexedItems
+                    };
+                    sender.ItemsSource = await search.SearchAsync();
                 }
                 else
                 {
@@ -306,7 +317,7 @@ namespace Files.Views
             }
         }
 
-        private void ModernShellPage_SearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        private void ModernShellPage_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
             if (args.ChosenSuggestion == null && !string.IsNullOrWhiteSpace(args.QueryText))
             {
@@ -316,6 +327,14 @@ namespace Files.Views
 
         public async void SubmitSearch(string query, bool searchUnindexedItems)
         {
+            var search = new FolderSearch
+            {
+                Query = query,
+                Folder = FilesystemViewModel.WorkingDirectory,
+                ThumbnailSize = InstanceViewModel.FolderSettings.GetIconSize(),
+                SearchUnindexedItems = searchUnindexedItems
+            };
+
             InstanceViewModel.CurrentSearchQuery = query;
             FilesystemViewModel.IsLoadingIndicatorActive = true;
             InstanceViewModel.SearchedUnindexedItems = searchUnindexedItems;
@@ -324,8 +343,7 @@ namespace Files.Views
                 AssociatedTabInstance = this,
                 IsSearchResultPage = true,
                 SearchPathParam = FilesystemViewModel.WorkingDirectory,
-                SearchResults = await FolderSearch.SearchForUserQueryTextAsync(query, FilesystemViewModel.WorkingDirectory, this, searchUnindexedItems, -1,
-                    InstanceViewModel.FolderSettings.GetIconSize())
+                SearchResults = await search.SearchAsync(),
             });
 
             FilesystemViewModel.IsLoadingIndicatorActive = false;
@@ -898,8 +916,9 @@ namespace Files.Views
         private async void ItemDisplayFrame_Navigated(object sender, NavigationEventArgs e)
         {
             ContentPage = await GetContentOrNullAsync();
-            NavigationToolbar.ClearSearchBoxQueryText(true);
-            if (ItemDisplayFrame.CurrentSourcePageType == (App.AppSettings.UseNewDetailsView ? typeof(GenericFileBrowser2) : typeof(GenericFileBrowser))
+            NavigationToolbar.SearchBox.Query = string.Empty;
+            NavigationToolbar.IsSearchBoxVisible = false;
+            if (ItemDisplayFrame.CurrentSourcePageType == (typeof(DetailsLayoutBrowser))
                 || ItemDisplayFrame.CurrentSourcePageType == typeof(GridViewBrowser))
             {
                 // Reset DataGrid Rows that may be in "cut" command mode
@@ -919,8 +938,8 @@ namespace Files.Views
             var ctrl = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Control);
             var alt = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Menu);
             var shift = args.KeyboardAccelerator.Modifiers.HasFlag(VirtualKeyModifiers.Shift);
-            var tabInstance = CurrentPageType == typeof(GenericFileBrowser)
-                || CurrentPageType == typeof(GenericFileBrowser2)
+            var tabInstance = CurrentPageType == typeof(DetailsLayoutBrowser)
+                || CurrentPageType == typeof(DetailsLayoutBrowser)
                 || CurrentPageType == typeof(GridViewBrowser);
 
             switch (c: ctrl, s: shift, a: alt, t: tabInstance, k: args.KeyboardAccelerator.Key)
@@ -940,7 +959,7 @@ namespace Files.Views
                     break;
 
                 case (true, false, false, true, VirtualKey.F): // ctrl + f
-                    NavigationToolbar.OpenSearchBox();
+                    NavigationToolbar.SwitchSearchBoxVisibility();
                     break;
 
                 case (true, true, false, true, VirtualKey.N): // ctrl + shift + n, new item
@@ -1015,7 +1034,7 @@ namespace Files.Views
                     break;
 
                 case (false, false, false, true, VirtualKey.Space): // space, quick look
-                    if (!NavigationToolbar.IsEditModeEnabled && !NavigationToolbar.IsSearchRegionVisible)
+                    if (!NavigationToolbar.IsEditModeEnabled && !NavigationToolbar.IsSearchBoxVisible)
                     {
                         if (InteractionViewModel.IsQuickLookEnabled)
                         {
@@ -1067,7 +1086,7 @@ namespace Files.Views
             switch (args.KeyboardAccelerator.Key)
             {
                 case VirtualKey.F2: //F2, rename
-                    if (CurrentPageType == typeof(GenericFileBrowser) || CurrentPageType == typeof(GenericFileBrowser2) || CurrentPageType == typeof(GridViewBrowser))
+                    if (CurrentPageType == typeof(DetailsLayoutBrowser) || CurrentPageType == typeof(GridViewBrowser))
                     {
                         if (ContentPage.IsItemSelected)
                         {
@@ -1084,7 +1103,7 @@ namespace Files.Views
             await CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
             {
                 var ContentOwnedViewModelInstance = FilesystemViewModel;
-                ContentOwnedViewModelInstance?.RefreshItems(null, false);
+                ContentOwnedViewModelInstance?.RefreshItems(null);
             });
         }
 
@@ -1192,15 +1211,15 @@ namespace Files.Views
             App.DrivesManager.PropertyChanged -= DrivesManager_PropertyChanged;
             NavigationToolbar.EditModeEnabled -= NavigationToolbar_EditModeEnabled;
             NavigationToolbar.PathBoxQuerySubmitted -= NavigationToolbar_QuerySubmitted;
-            NavigationToolbar.SearchQuerySubmitted -= ModernShellPage_SearchQuerySubmitted;
-            NavigationToolbar.SearchTextChanged -= ModernShellPage_SearchTextChanged;
-            NavigationToolbar.SearchSuggestionChosen -= ModernShellPage_SearchSuggestionChosen;
             NavigationToolbar.BackRequested -= ModernShellPage_BackNavRequested;
             NavigationToolbar.ForwardRequested -= ModernShellPage_ForwardNavRequested;
             NavigationToolbar.UpRequested -= ModernShellPage_UpNavRequested;
             NavigationToolbar.RefreshRequested -= ModernShellPage_RefreshRequested;
             NavigationToolbar.RefreshWidgetsRequested += ModernShellPage_RefreshWidgetsRequested;
             NavigationToolbar.ItemDraggedOverPathItem -= ModernShellPage_NavigationRequested;
+            NavigationToolbar.SearchBox.QueryChanged -= ModernShellPage_QueryChanged;
+            NavigationToolbar.SearchBox.QuerySubmitted -= ModernShellPage_QuerySubmitted;
+            NavigationToolbar.SearchBox.SuggestionChosen -= ModernShellPage_SuggestionChosen;
             if (NavigationToolbar is NavigationToolbar navToolbar)
             {
                 navToolbar.ToolbarPathItemInvoked -= ModernShellPage_NavigationRequested;
@@ -1423,7 +1442,7 @@ namespace Files.Views
 
                 if (sourcePageType == typeof(WidgetsPage)
                     || ItemDisplayFrame.Content.GetType() == typeof(WidgetsPage) &&
-                    (sourcePageType == typeof(GenericFileBrowser) || sourcePageType == typeof(GenericFileBrowser2) || sourcePageType == typeof(GridViewBrowser)))
+                    (sourcePageType == typeof(DetailsLayoutBrowser) || sourcePageType == typeof(GridViewBrowser)))
                 {
                     transition = new EntranceNavigationTransitionInfo();
                 }

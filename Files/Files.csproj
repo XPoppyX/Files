@@ -242,6 +242,7 @@
     <Compile Include="Helpers\WidgetsHelpers.cs" />
     <Compile Include="Helpers\Win32Helpers.cs" />
     <Compile Include="Interacts\ItemManipulationModel.cs" />
+    <Compile Include="ISearchBox.cs" />
     <Compile Include="UserControls\ArrangementOptions.xaml.cs">
       <DependentUpon>ArrangementOptions.xaml</DependentUpon>
     </Compile>
@@ -261,7 +262,6 @@
     <Compile Include="Helpers\CollectionDebugView.cs" />
     <Compile Include="Helpers\DynamicDialogFactory.cs" />
     <Compile Include="Helpers\Extension.cs" />
-    <Compile Include="Helpers\FileListCache\CacheEntry.cs" />
     <Compile Include="Helpers\FileListCache\FileListCacheController.cs" />
     <Compile Include="Helpers\FileListCache\IFileListCache.cs" />
     <Compile Include="Helpers\FileListCache\PersistentSQLiteCacheAdapter.cs" />
@@ -305,6 +305,9 @@
     </Compile>
     <Compile Include="UserControls\MultitaskingControl\TabItem\TabItemControl.xaml.cs">
       <DependentUpon>TabItemControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\SearchBox.xaml.cs">
+      <DependentUpon>SearchBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Selection\ExtendPreviousItemSelectionStrategy.cs" />
     <Compile Include="Helpers\GenericItemsCollection.cs" />
@@ -501,17 +504,14 @@
     <Compile Include="Views\LayoutModes\ColumnViewBrowser.xaml.cs">
       <DependentUpon>ColumnViewBrowser.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\LayoutModes\GenericFileBrowser2.xaml.cs">
-      <DependentUpon>GenericFileBrowser2.xaml</DependentUpon>
+    <Compile Include="Views\LayoutModes\DetailsLayoutBrowser.xaml.cs">
+      <DependentUpon>DetailsLayoutBrowser.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\PropertiesLibrary.xaml.cs">
       <DependentUpon>PropertiesLibrary.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\PaneHolderPage.xaml.cs">
       <DependentUpon>PaneHolderPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\LayoutModes\GenericFileBrowser.xaml.cs">
-      <DependentUpon>GenericFileBrowser.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\InteractionViewModel.cs" />
     <Compile Include="ViewModels\DirectoryPropertiesViewModel.cs" />
@@ -926,6 +926,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\SearchBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\SidebarControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -970,7 +974,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\LayoutModes\GenericFileBrowser2.xaml">
+    <Page Include="Views\LayoutModes\DetailsLayoutBrowser.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -979,10 +983,6 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\PaneHolderPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\LayoutModes\GenericFileBrowser.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
