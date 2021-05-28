@@ -1431,9 +1431,6 @@
   <data name="NavToolbarTilesView.ToolTipService.ToolTip" xml:space="preserve">
     <value>Lista</value>
   </data>
-  <data name="NavToolbarLayoutMode.Text" xml:space="preserve">
-    <value>Elrendezés</value>
-  </data>
   <data name="NavToolbarDisplayOptions.Text" xml:space="preserve">
     <value>Megjelenítési lehetőségek</value>
   </data>
@@ -2025,12 +2022,6 @@
   <data name="NavToolbarSelectionOptions.AutomationProperties.Name" xml:space="preserve">
     <value>Kijelölési lehetőségek</value>
   </data>
-  <data name="NavToolbarDisplayOptionsButton.AutomationProperties.Name" xml:space="preserve">
-    <value>Megjelenítési lehetőségek</value>
-  </data>
-  <data name="NavToolbarDisplayOptionsButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Megjelenítési lehetőségek</value>
-  </data>
   <data name="FileBrowserThumbnailIconColumnGrid.AutomationProperties.Name" xml:space="preserve">
     <value>Fájl ikon</value>
   </data>
@@ -2057,12 +2048,6 @@
   </data>
   <data name="OpenItemsWithCaptionText" xml:space="preserve">
     <value>Társítás</value>
-  </data>
-  <data name="NavToolbarArrangementOptionsButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Elrendezési lehetőségek</value>
-  </data>
-  <data name="NavToolbarArrangementOptionsButton.AutomationProperties.Name" xml:space="preserve">
-    <value>Elrendezési lehetőségek</value>
   </data>
   <data name="NavToolbarGroupByRadioButtons.Header" xml:space="preserve">
     <value>Csoportosítás</value>

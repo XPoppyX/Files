@@ -1431,9 +1431,6 @@
   <data name="NavToolbarTilesView.ToolTipService.ToolTip" xml:space="preserve">
     <value>Kachelansicht</value>
   </data>
-  <data name="NavToolbarLayoutMode.Text" xml:space="preserve">
-    <value>Layout Modus</value>
-  </data>
   <data name="NavToolbarDisplayOptions.Text" xml:space="preserve">
     <value>Anzeigeoptionen</value>
   </data>
@@ -2031,12 +2028,6 @@
   <data name="NavToolbarSelectionOptions.AutomationProperties.Name" xml:space="preserve">
     <value>Auswahloptionen</value>
   </data>
-  <data name="NavToolbarDisplayOptionsButton.AutomationProperties.Name" xml:space="preserve">
-    <value>Anzeigeoptionen</value>
-  </data>
-  <data name="NavToolbarDisplayOptionsButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Anzeigeoptionen</value>
-  </data>
   <data name="FileBrowserThumbnailIconColumnGrid.AutomationProperties.Name" xml:space="preserve">
     <value>Datei-Icon</value>
   </data>
@@ -2063,12 +2054,6 @@
   </data>
   <data name="OpenItemsWithCaptionText" xml:space="preserve">
     <value>Öffnen mit</value>
-  </data>
-  <data name="NavToolbarArrangementOptionsButton.ToolTipService.ToolTip" xml:space="preserve">
-    <value>Anordungsoptionen</value>
-  </data>
-  <data name="NavToolbarArrangementOptionsButton.AutomationProperties.Name" xml:space="preserve">
-    <value>Anordungsoptionen</value>
   </data>
   <data name="NavToolbarGroupByRadioButtons.Header" xml:space="preserve">
     <value>Gruppieren nach</value>
