@@ -2118,15 +2118,6 @@
   <data name="ConflictingItemsDialogOptionSkip.Text" xml:space="preserve">
     <value>Skip</value>
   </data>
-  <data name="FileBrowserSortOption_Name.Text" xml:space="preserve">
-    <value>Name</value>
-  </data>
-  <data name="FileBrowserSortOption_DateModified.Text" xml:space="preserve">
-    <value>Date modified</value>
-  </data>
-  <data name="FileBrowserSortOption_FileType.Text" xml:space="preserve">
-    <value>Type</value>
-  </data>
   <data name="FileOperationsDialogDetailsExpander.Header" xml:space="preserve">
     <value>Details</value>
   </data>
@@ -2411,5 +2402,11 @@
   </data>
   <data name="NavToolbarWidgets.Label" xml:space="preserve">
     <value>Widgets</value>
+  </data>
+  <data name="BaseLayoutContextFlyoutSortBySyncStatus.Text" xml:space="preserve">
+    <value>Sync status</value>
+  </data>
+  <data name="NavToolbarArrangementOption_SyncStatus.Content" xml:space="preserve">
+    <value>Sync status</value>
   </data>
 </root>

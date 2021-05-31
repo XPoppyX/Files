@@ -52,8 +52,8 @@ namespace Files.ViewModels
         // only used for Binding and ApplyFilesAndFoldersChangesAsync, don't manipulate on this!
         public BulkConcurrentObservableCollection<ListedItem> FilesAndFolders { get; }
 
-        public SettingsViewModel AppSettings => App.AppSettings;
-        public FolderSettingsViewModel folderSettings = null;
+        private SettingsViewModel AppSettings => App.AppSettings;
+        private FolderSettingsViewModel folderSettings = null;
         private bool shouldDisplayFileExtensions = false;
         public ListedItem CurrentFolder { get; private set; }
         public CollectionViewSource viewSource;
@@ -171,6 +171,7 @@ namespace Files.ViewModels
             NotifyPropertyChanged(nameof(IsSortedByOriginalPath));
             NotifyPropertyChanged(nameof(IsSortedByDateDeleted));
             NotifyPropertyChanged(nameof(IsSortedByDateCreated));
+            NotifyPropertyChanged(nameof(IsSortedBySyncStatus));
             await OrderFilesAndFoldersAsync();
             await ApplyFilesAndFoldersChangesAsync();
         }
@@ -270,6 +271,19 @@ namespace Files.ViewModels
                 {
                     folderSettings.DirectorySortOption = SortOption.Size;
                     NotifyPropertyChanged(nameof(IsSortedBySize));
+                }
+            }
+        }
+
+        public bool IsSortedBySyncStatus
+        {
+            get => folderSettings.DirectorySortOption == SortOption.SyncStatus;
+            set
+            {
+                if (value)
+                {
+                    folderSettings.DirectorySortOption = SortOption.SyncStatus;
+                    NotifyPropertyChanged(nameof(IsSortedBySyncStatus));
                 }
             }
         }

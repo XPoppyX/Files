@@ -46,7 +46,7 @@ namespace Files
         public static StorageHistoryWrapper HistoryWrapper = new StorageHistoryWrapper();
         public static IBundlesSettings BundlesSettings = new BundlesSettingsViewModel();
         public static SettingsViewModel AppSettings { get; private set; }
-        public static InteractionViewModel InteractionViewModel { get; private set; }
+        public static MainViewModel MainViewModel { get; private set; }
         public static JumpListManager JumpList { get; } = new JumpListManager();
         public static SidebarPinnedController SidebarPinnedController { get; private set; }
         public static CloudDrivesManager CloudDrivesManager { get; private set; }
@@ -78,13 +78,11 @@ namespace Files
             InitializeComponent();
             Suspending += OnSuspending;
             LeavingBackground += OnLeavingBackground;
-            Clipboard.ContentChanged += Clipboard_ContentChanged;
+           
             // Initialize NLog
             StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
             LogManager.Configuration.Variables["LogPath"] = storageFolder.Path;
             AppData.FilePreviewExtensionManager.Initialize(); // The extension manager can update UI, so pass it the UI dispatcher to use for UI updates
-
-            StartAppCenter();
         }
 
         private static async Task EnsureSettingsAndConfigurationAreBootstrapped()
@@ -97,7 +95,7 @@ namespace Files
             ExternalResourcesHelper ??= new ExternalResourcesHelper();
             await ExternalResourcesHelper.LoadSelectedTheme();
 
-            InteractionViewModel ??= new InteractionViewModel();
+            MainViewModel ??= new MainViewModel();
             SidebarPinnedController ??= await SidebarPinnedController.CreateInstance();
             LibraryManager ??= new LibraryManager();
             DrivesManager ??= new DrivesManager();
@@ -114,23 +112,6 @@ namespace Files
                 await NetworkDrivesManager.EnumerateDrivesAsync();
                 await WSLDistroManager.EnumerateDrivesAsync();
             });
-        }
-
-        private async void StartAppCenter()
-        {
-            JObject obj;
-            try
-            {
-                StorageFile file = await StorageFile.GetFileFromApplicationUriAsync(new Uri(@"ms-appx:///Resources/AppCenterKey.txt"));
-                var lines = await FileIO.ReadTextAsync(file);
-                obj = JObject.Parse(lines);
-            }
-            catch
-            {
-                return;
-            }
-
-            AppCenter.Start((string)obj.SelectToken("key"), typeof(Analytics), typeof(Crashes));
         }
 
         private void OnLeavingBackground(object sender, LeavingBackgroundEventArgs e)
@@ -211,36 +192,13 @@ namespace Files
             {
                 ShowErrorNotification = true;
                 ApplicationData.Current.LocalSettings.Values["INSTANCE_ACTIVE"] = Process.GetCurrentProcess().Id;
-                Clipboard_ContentChanged(null, null);
+                if (MainViewModel != null)
+                {
+                    MainViewModel.Clipboard_ContentChanged(null, null);
+                }
             }
         }
 
-        private void Clipboard_ContentChanged(object sender, object e)
-        {
-            if (App.InteractionViewModel == null)
-            {
-                return;
-            }
-
-            try
-            {
-                // Clipboard.GetContent() will throw UnauthorizedAccessException
-                // if the app window is not in the foreground and active
-                DataPackageView packageView = Clipboard.GetContent();
-                if (packageView.Contains(StandardDataFormats.StorageItems) || packageView.Contains(StandardDataFormats.Bitmap))
-                {
-                    App.InteractionViewModel.IsPasteEnabled = true;
-                }
-                else
-                {
-                    App.InteractionViewModel.IsPasteEnabled = false;
-                }
-            }
-            catch
-            {
-                App.InteractionViewModel.IsPasteEnabled = false;
-            }
-        }
 
         protected override async void OnActivated(IActivatedEventArgs args)
         {

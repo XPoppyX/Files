@@ -246,6 +246,9 @@
     <Compile Include="UserControls\ArrangementOptions.xaml.cs">
       <DependentUpon>ArrangementOptions.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\DataGridHeader.xaml.cs">
+      <DependentUpon>DataGridHeader.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\FilePreviews\CodePreview.xaml.cs">
       <DependentUpon>CodePreview.xaml</DependentUpon>
     </Compile>
@@ -448,7 +451,6 @@
     <Compile Include="UserControls\MultitaskingControl\TabItem\ITabItem.cs" />
     <Compile Include="UserControls\MultitaskingControl\TabItem\ITabItemControl.cs" />
     <Compile Include="UserControls\Selection\RectangleSelection.cs" />
-    <Compile Include="UserControls\Selection\RectangleSelection_DataGrid.cs" />
     <Compile Include="UserControls\Selection\RectangleSelection_ListViewBase.cs" />
     <Compile Include="UserControls\SidebarControl.xaml.cs">
       <DependentUpon>SidebarControl.xaml</DependentUpon>
@@ -513,7 +515,7 @@
     <Compile Include="Views\PaneHolderPage.xaml.cs">
       <DependentUpon>PaneHolderPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\InteractionViewModel.cs" />
+    <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\DirectoryPropertiesViewModel.cs" />
     <Compile Include="ViewModels\SelectedItemsPropertiesViewModel.cs" />
     <Compile Include="IShellPage.cs" />
@@ -830,15 +832,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="UserControls\DataGridHeader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\FilePreviews\CodePreview.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="UserControls\RestartControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="ResourceDictionaries\CustomDataGridStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
