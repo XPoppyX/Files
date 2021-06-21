@@ -116,13 +116,9 @@ namespace Files.Views
                 {
                     isPageMainPane = value;
                     NotifyPropertyChanged(nameof(IsPageMainPane));
-                    NotifyPropertyChanged(nameof(IsPageSecondaryPane));
                 }
             }
         }
-
-        public static readonly DependencyProperty IsPageMainPaneProperty =
-            DependencyProperty.Register("IsPageMainPane", typeof(bool), typeof(ColumnShellPage), new PropertyMetadata(true));
 
         public SolidColorBrush CurrentInstanceBorderBrush
         {
@@ -132,8 +128,6 @@ namespace Files.Views
 
         public static readonly DependencyProperty CurrentInstanceBorderBrushProperty =
             DependencyProperty.Register("CurrentInstanceBorderBrush", typeof(SolidColorBrush), typeof(ColumnShellPage), new PropertyMetadata(null));
-
-        public bool IsPageSecondaryPane => !IsMultiPaneActive || !IsPageMainPane;
 
         public Type CurrentPageType => ItemDisplayFrame.SourcePageType;
 
@@ -201,13 +195,12 @@ namespace Files.Views
             NavToolbarViewModel.CopyPathOfWorkingDirectoryCommand = new RelayCommand(CopyWorkingLocation);
             NavToolbarViewModel.OpenNewWindowCommand = new RelayCommand(NavigationHelpers.LaunchNewWindow);
             NavToolbarViewModel.OpenNewPaneCommand = new RelayCommand(() => PaneHolder?.OpenPathInNewPane("NewTab".GetLocalized()));
+            NavToolbarViewModel.ClosePaneCommand = new RelayCommand(() => PaneHolder?.CloseActivePane());
             NavToolbarViewModel.OpenDirectoryInDefaultTerminalCommand = new RelayCommand(() => NavigationHelpers.OpenDirectoryInTerminal(this.FilesystemViewModel.WorkingDirectory, this));
             NavToolbarViewModel.AddNewTabToMultitaskingControlCommand = new RelayCommand(async () => await MainPageViewModel.AddNewTabAsync());
             NavToolbarViewModel.CreateNewFileCommand = new RelayCommand<ShellNewEntry>(x => UIFilesystemHelpers.CreateFileFromDialogResultType(AddItemType.File, x, this));
             NavToolbarViewModel.CreateNewFolderCommand = new RelayCommand(() => UIFilesystemHelpers.CreateFileFromDialogResultType(AddItemType.Folder, null, this));
-            NavToolbarViewModel.PreviewPaneInvokedCommand = new RelayCommand(() => PreviewPaneEnabled = !PreviewPaneEnabled);
         }
-
 
         private void ColumnViewBase_ItemInvoked(object sender, EventArgs e)
         {
@@ -518,37 +511,6 @@ namespace Files.Views
             }
         }
 
-        private bool isMultiPaneActive;
-
-        public bool IsMultiPaneActive
-        {
-            get => isMultiPaneActive;
-            set
-            {
-                if (value != isMultiPaneActive)
-                {
-                    isMultiPaneActive = value;
-                    NotifyPropertyChanged(nameof(IsMultiPaneActive));
-                    NotifyPropertyChanged(nameof(IsPageSecondaryPane));
-                }
-            }
-        }
-
-        private bool isMultiPaneEnabled;
-
-        public bool IsMultiPaneEnabled
-        {
-            get => isMultiPaneEnabled;
-            set
-            {
-                if (value != isMultiPaneEnabled)
-                {
-                    isMultiPaneEnabled = value;
-                    NotifyPropertyChanged(nameof(IsMultiPaneEnabled));
-                }
-            }
-        }
-
         private IPaneHolder paneHolder;
 
         public IPaneHolder PaneHolder
@@ -582,7 +544,6 @@ namespace Files.Views
             FilesystemViewModel.PageTypeUpdated += FilesystemViewModel_PageTypeUpdated;
             OnNavigationParamsChanged();
             ServiceConnection = await AppServiceConnectionHelper.Instance;
-            FilesystemViewModel.OnAppServiceConnectionChanged(ServiceConnection);
             this.Loaded -= Page_Loaded;
         }
 
@@ -841,7 +802,6 @@ namespace Files.Views
         private async void AppServiceConnectionHelper_ConnectionChanged(object sender, Task<NamedPipeAsAppServiceConnection> e)
         {
             ServiceConnection = await e;
-            FilesystemViewModel?.OnAppServiceConnectionChanged(ServiceConnection);
         }
 
         private void FilesystemViewModel_ItemLoadStatusChanged(object sender, ItemLoadStatusChangedEventArgs e)
@@ -911,10 +871,9 @@ namespace Files.Views
 
             foreach (var x in multitaskingControls)
             {
-                x.SetLoadingIndicatorStatus(x.Items.First(x => x.Control == tabItemControl), isLoading);
+                x.SetLoadingIndicatorStatus(x.Items.FirstOrDefault(x => x.Control == tabItemControl), isLoading);
             }
         }
-
 
         public DataPackageOperation TabItemDragOver(object sender, DragEventArgs e)
         {
@@ -944,78 +903,6 @@ namespace Files.Views
                 }
             }
             return DataPackageOperation.None;
-        }
-
-        private void RootGrid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            UpdatePositioning();
-        }
-
-        /// <summary>
-        /// Call this function to update the positioning of the preview pane.
-        /// This is a workaround as the VisualStateManager causes problems.
-        /// </summary>
-        private void UpdatePositioning()
-        {
-            if (!LoadPreviewPane || PreviewPaneDropShadowPanel is null || PreviewPane is null)
-            {
-                PreviewPaneRow.Height = new GridLength(0);
-                PreviewPaneColumn.Width = new GridLength(0);
-            }
-            else if (RootGrid.ActualWidth > 800)
-            {
-                PreviewPaneDropShadowPanel.SetValue(Grid.RowProperty, 2);
-                PreviewPaneDropShadowPanel.SetValue(Grid.ColumnProperty, 2);
-
-                PreviewPaneDropShadowPanel.OffsetX = -2;
-                PreviewPaneDropShadowPanel.OffsetY = 0;
-                PreviewPaneDropShadowPanel.ShadowOpacity = 0.04;
-
-                PreviewPaneGridSplitter.SetValue(Grid.RowProperty, 2);
-                PreviewPaneGridSplitter.SetValue(Grid.ColumnProperty, 1);
-                PreviewPaneGridSplitter.Width = 2;
-                PreviewPaneGridSplitter.Height = RootGrid.ActualHeight;
-
-                PreviewPaneRow.Height = new GridLength(0);
-                PreviewPaneColumn.Width = AppSettings.PreviewPaneSizeVertical;
-                PreviewPane.IsHorizontal = false;
-            }
-            else if (RootGrid.ActualWidth <= 800)
-            {
-                PreviewPaneRow.Height = AppSettings.PreviewPaneSizeHorizontal;
-                PreviewPaneColumn.Width = new GridLength(0);
-
-                PreviewPaneDropShadowPanel.SetValue(Grid.RowProperty, 4);
-                PreviewPaneDropShadowPanel.SetValue(Grid.ColumnProperty, 0);
-
-                PreviewPaneDropShadowPanel.OffsetX = 0;
-                PreviewPaneDropShadowPanel.OffsetY = -2;
-                PreviewPaneDropShadowPanel.ShadowOpacity = 0.04;
-
-                PreviewPaneGridSplitter.SetValue(Grid.RowProperty, 3);
-                PreviewPaneGridSplitter.SetValue(Grid.ColumnProperty, 0);
-                PreviewPaneGridSplitter.Height = 2;
-                PreviewPaneGridSplitter.Width = RootGrid.Width;
-                PreviewPane.IsHorizontal = true;
-            }
-        }
-
-        private void PreviewPaneGridSplitter_ManipulationCompleted(object sender, ManipulationCompletedRoutedEventArgs e)
-        {
-            if (PreviewPane == null)
-            {
-                return;
-            }
-
-            if (PreviewPane.IsHorizontal)
-            {
-                AppSettings.PreviewPaneSizeHorizontal = new GridLength(PreviewPane.ActualHeight);
-            }
-            else
-            {
-                AppSettings.PreviewPaneSizeVertical = new GridLength(PreviewPane.ActualWidth);
-            }
-        
         }
 
         public void NavigateWithArguments(Type sourcePageType, NavigationArguments navArgs)
@@ -1095,37 +982,6 @@ namespace Files.Views
                 SearchPathParam = FilesystemViewModel.WorkingDirectory,
                 SearchResults = await search.SearchAsync(),
             });
-        }
-
-        public bool LoadPreviewPane => AppSettings.PreviewPaneEnabled && InstanceViewModel.IsPageTypeNotHome;
-
-        public void LoadPreviewPaneChanged()
-        {
-            NotifyPropertyChanged(nameof(LoadPreviewPane));
-            UpdatePositioning();
-        }
-
-        private void PreviewPane_Loading(FrameworkElement sender, object args)
-        {
-            UpdatePositioning();
-        }
-
-        private bool previewPaneEnabled = App.AppSettings.PreviewPaneEnabled;
-
-        // This is needed so the layout can be updated when the preview pane is opened
-        public bool PreviewPaneEnabled
-        {
-            get => previewPaneEnabled;
-            set
-            {
-                if (value != previewPaneEnabled)
-                {
-                    AppSettings.PreviewPaneEnabled = value;
-                    NotifyPropertyChanged(nameof(PreviewPaneEnabled));
-                    NotifyPropertyChanged(nameof(LoadPreviewPane));
-                    UpdatePositioning();
-                }
-            }
         }
     }
 }

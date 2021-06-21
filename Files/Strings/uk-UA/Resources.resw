@@ -78,9 +78,6 @@
   <data name="RecentItemRemove.Text" xml:space="preserve">
     <value>Видалити цей елемент</value>
   </data>
-  <data name="RecentItems.Text" xml:space="preserve">
-    <value>Останні файли</value>
-  </data>
   <data name="SettingsAboutAppName.Text" xml:space="preserve">
     <value>Files</value>
   </data>
@@ -483,9 +480,6 @@
   <data name="PropertiesAccessed.Text" xml:space="preserve">
     <value>Відкрито:</value>
   </data>
-  <data name="PropertiesOwner.Text" xml:space="preserve">
-    <value>Власник:</value>
-  </data>
   <data name="ConfirmEmptyBinDialog.SecondaryButtonText" xml:space="preserve">
     <value>Скасувати</value>
   </data>
@@ -846,9 +840,6 @@
   <data name="SettingsAppearanceTheme.Header" xml:space="preserve">
     <value>Тема</value>
   </data>
-  <data name="SettingsShowFileOwnerInProperties.Header" xml:space="preserve">
-    <value>Показуквати Власника у властивостях</value>
-  </data>
   <data name="StatusCenter.AutomationProperties.Name" xml:space="preserve">
     <value>Поточні операції</value>
   </data>
@@ -1184,9 +1175,6 @@
   </data>
   <data name="SettingsDateFormatsTip.AutomationProperties.Name" xml:space="preserve">
     <value>Дізнайтеся більше про формати дат</value>
-  </data>
-  <data name="DragDropWindowText" xml:space="preserve">
-    <value>Перетягніть сюди</value>
   </data>
   <data name="SearchPagePathBoxOverrideText" xml:space="preserve">
     <value>Результати пошуку в</value>
@@ -1559,9 +1547,6 @@
   </data>
   <data name="Browse" xml:space="preserve">
     <value>Вибрати</value>
-  </data>
-  <data name="RecentLocations" xml:space="preserve">
-    <value>Нещодавні розташування</value>
   </data>
   <data name="DetailsPanePreviewNotAvaliableText" xml:space="preserve">
     <value>Попередній перегляд недоступний</value>

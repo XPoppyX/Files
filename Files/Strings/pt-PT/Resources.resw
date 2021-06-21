@@ -90,9 +90,6 @@
   <data name="PropertiesAccessed.Text" xml:space="preserve">
     <value>Acedido em:</value>
   </data>
-  <data name="PropertiesOwner.Text" xml:space="preserve">
-    <value>Proprietário:</value>
-  </data>
   <data name="RecentItemClearAll.Text" xml:space="preserve">
     <value>Limpar todos os itens</value>
   </data>
@@ -110,9 +107,6 @@
   </data>
   <data name="RecentItemRemove.Text" xml:space="preserve">
     <value>Remover este item</value>
-  </data>
-  <data name="RecentItems.Text" xml:space="preserve">
-    <value>Itens Recentes</value>
   </data>
   <data name="SettingsAboutAppName.Text" xml:space="preserve">
     <value>Files</value>
@@ -846,9 +840,6 @@
   <data name="SettingsAppearanceTheme.Header" xml:space="preserve">
     <value>Tema da aplicação</value>
   </data>
-  <data name="SettingsShowFileOwnerInProperties.Header" xml:space="preserve">
-    <value>Mostrar proprietário nas propriedades</value>
-  </data>
   <data name="StatusCenter.AutomationProperties.Name" xml:space="preserve">
     <value>Centro de Estado</value>
   </data>
@@ -1230,9 +1221,6 @@
   <data name="SettingsDateFormatsTip.AutomationProperties.Name" xml:space="preserve">
     <value>Saiba mais sobre formato de datas</value>
   </data>
-  <data name="DragDropWindowText" xml:space="preserve">
-    <value>Soltar aqui</value>
-  </data>
   <data name="SearchPagePathBoxOverrideText" xml:space="preserve">
     <value>Resultados da pesquisa em</value>
   </data>
@@ -1605,9 +1593,6 @@
   <data name="Browse" xml:space="preserve">
     <value>Navegar</value>
   </data>
-  <data name="RecentLocations" xml:space="preserve">
-    <value>Localizações Recentes</value>
-  </data>
   <data name="DetailsPanePreviewNotAvaliableText" xml:space="preserve">
     <value>Nenhuma pré-visualização disponível</value>
   </data>
@@ -1628,9 +1613,6 @@
   </data>
   <data name="SidebarLibraries" xml:space="preserve">
     <value>Bibliotecas</value>
-  </data>
-  <data name="BundlesOpenInNewPane" xml:space="preserve">
-    <value>Abrir num novo Painel</value>
   </data>
   <data name="PropertyItemCount" xml:space="preserve">
     <value>Contagem de itens</value>
